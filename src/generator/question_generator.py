@@ -30,7 +30,7 @@ class QuestionGenerator:
             parser = PydanticOutputParser(pydantic_object=MCQQuestion)
             question = self._retry_and_parse(mcq_prompt_template, parser, topic, difficulty)
 
-            if len(question.options) != 4 or question.answer not in question.options:
+            if len(question.options) != 4 or question.correct_answer not in question.options:
                 raise CustomException("Generated MCQ does not have exactly 4 options or the answer is not among the options.")
             
             self.logger.info(f"Generated a valid MCQ question for topic: {topic}, difficulty: {difficulty}")
