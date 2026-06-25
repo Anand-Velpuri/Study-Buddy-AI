@@ -1,0 +1,71 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+env/
+.venv/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Python Packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment Variables
+.env
+
+# Streamlit Cache
+.streamlit/cache/
+
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Temporary Files
+tmp/
+temp/
+
+# Terraform (if used)
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# Docker
+Dockerfile*
+docker-compose.yml
+
+# AWS
+.aws/
+
+# SonarQube
+.scannerwork/
+
+# Mac/Linux
+*.swp
+*.swo
+
+results/
