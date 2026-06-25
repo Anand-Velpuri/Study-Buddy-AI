@@ -1,6 +1,10 @@
 pipeline {
     agent any
-   
+    environment {
+        DOCKER_HUB_REPO = "anandvelpuri/studybuddyai"
+        DOCKER_HUB_CREDENTIALS_ID = "dockerhub-token"
+        IMAGE_TAG = "v${BUILD_NUMBER}"
+    }
     stages {
         stage('Checkout Github') {
             steps {
@@ -8,6 +12,24 @@ pipeline {
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-token', url: 'https://github.com/Anand-Velpuri/Study-Buddy-AI.git']])
             }
         }        
-       
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    echo 'Building Docker image...'
+                    dockerImage = docker.build("${DOCKER_HUB_REPO}:${IMAGE_TAG}")
+                }
+            }
+        }
+        stage('Push Image to DockerHub') {
+            steps {
+                script {
+                    echo 'Pushing Docker image to DockerHub...'
+                    docker.withRegistry('https://registry.hub.docker.com' , "${DOCKER_HUB_CREDENTIALS_ID}") {
+                        dockerImage.push("${IMAGE_TAG}")
+                    }
+                }
+            }
+        }
+        
     }
 }
