@@ -7,7 +7,7 @@ from src.generator.question_generator import QuestionGenerator
 load_dotenv(override=True)
 
 def main():
-    st.set_page_config(page_title="Study Buddy AI",
+    st.set_page_config(page_title="Study Buddy AI.",
                       page_icon="📚"
                      )
     
