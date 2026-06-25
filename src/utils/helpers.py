@@ -12,29 +12,33 @@ def rerun():
 class QuizManager:
     def __init__(self):
         self.questions = []
-        self.user_answers = []
         self.results = []
     
     def generate_questions(self, generator: QuestionGenerator, topic: str, question_type: str, difficulty: str, num_questions: int):
         self.questions = []
-        self.user_answers = []
         self.results = []
 
         try:
-            for _ in range(num_questions):
-                if question_type == "Multiple Choice":
-                    question = generator.generate_mcq(topic, difficulty.lower())
-                    self.questions.append({"type": "MCQ",
-                                           "question": question.question,
-                                           "options": question.options,
-                                           "correct_answer": question.correct_answer
-                                           })
-                else:
-                    question = generator.generate_fill_blank(topic, difficulty.lower())
-                    self.questions.append({"type": "Fill in the Blank",
-                                           "question": question.question,
-                                           "correct_answer": question.answer
-                                           }) 
+            # ONE batched LLM call that returns the strictly typed suite
+            quiz_suite = generator.generate_questions_suite(topic, question_type, difficulty.lower(), num_questions)
+            
+            # Unpack based on the requested type (since Pydantic guarantees the structure now)
+            if question_type == "Multiple Choice":
+                for question in quiz_suite.questions:
+                    self.questions.append({
+                        "type": "MCQ",
+                        "question": question.question,
+                        "options": question.options,
+                        "correct_answer": question.correct_answer
+                    })
+            elif question_type == "Fill in the Blank":
+                for question in quiz_suite.questions:
+                    self.questions.append({
+                        "type": "Fill in the Blank",
+                        "question": question.question,
+                        "correct_answer": question.answer
+                    })
+
         except Exception as e:
             st.error(f"Error generating questions: {e}")
             raise Exception(f"Error generating questions: {e}")
@@ -43,26 +47,33 @@ class QuizManager:
     
     def attempt_quiz(self):
         for i, q in enumerate(self.questions):
-            st.markdown(f"**Question {i + 1} : {q["question"]}**")
+            # Fixed the double quotes inside the f-string to single quotes
+            st.markdown(f"**Question {i + 1} : {q['question']}**")
 
             if q["type"] == "MCQ":
-                user_answer = st.radio(f"Select an answer for Question {i + 1}",
-                                       options=q["options"],
-                                       key=f"mcq_{i}"
-                                       )
-                
-                self.user_answers.append(user_answer)
+                # We render the widget and assign a key. 
+                # Streamlit automatically saves the user's choice to st.session_state
+                st.radio(
+                    f"Select an answer for Question {i + 1}",
+                    options=q["options"],
+                    key=f"mcq_{i}"
+                )
             else:
-                user_answer = st.text_input(f"Fill in the blank for Question {i + 1}",
-                                            key=f"fill_blank_{i}"
-                                            )
-                
-                self.user_answers.append(user_answer)
+                st.text_input(
+                    f"Fill in the blank for Question {i + 1}",
+                    key=f"fill_blank_{i}"
+                )
     
     def evaluate_quiz(self):
         self.results = []
 
-        for i, (q, user_ans) in enumerate(zip(self.questions, self.user_answers)):
+        for i, q in enumerate(self.questions):
+            # Fetch the user's exact answer directly from session_state using the key
+            if q["type"] == "MCQ":
+                user_ans = st.session_state.get(f"mcq_{i}", "")
+            else:
+                user_ans = st.session_state.get(f"fill_blank_{i}", "")
+
             result_dict = {
                 "question_number": i+1,
                 "question": q["question"],
@@ -107,4 +118,3 @@ class QuizManager:
         except Exception as e:
             st.error(f"Failed to save results: {e}")
             return None
-        

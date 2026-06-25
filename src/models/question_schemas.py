@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union, Literal
 from pydantic import BaseModel, Field, field_validator
 
 class MCQQuestion(BaseModel):
@@ -17,3 +17,10 @@ class MCQQuestion(BaseModel):
 class FillBlankQuestion(BaseModel):
     question: str = Field(..., description="The text of the fill-in-the-blank question with '________'.")
     answer: str = Field(..., description="The correct word or phrase for the blank.")
+
+
+class MCQQuizSuite(BaseModel):
+    questions: List[MCQQuestion] = Field(..., description="A list of multiple-choice questions.")
+
+class FillBlankQuizSuite(BaseModel):
+    questions: List[FillBlankQuestion] = Field(..., description="A list of fill-in-the-blank questions.")
