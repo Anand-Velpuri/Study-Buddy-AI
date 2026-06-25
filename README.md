@@ -1,3 +1,9 @@
+<h1 align="center">📚 Study Buddy AI</h1>
+
+<p align="center">
+  <em>An AI-powered quiz generation platform with a production-grade GitOps deployment pipeline.</em>
+</p>
+
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.10-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
   <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Streamlit"/>
@@ -8,12 +14,6 @@
   <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white" alt="Jenkins"/>
   <img src="https://img.shields.io/badge/ArgoCD-EF7B4D?style=for-the-badge&logo=argo&logoColor=white" alt="ArgoCD"/>
   <img src="https://img.shields.io/badge/AWS_EC2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white" alt="AWS EC2"/>
-</p>
-
-<h1 align="center">📚 Study Buddy AI</h1>
-
-<p align="center">
-  <em>An AI-powered quiz generation platform with a production-grade GitOps deployment pipeline.</em>
 </p>
 
 <p align="center">
