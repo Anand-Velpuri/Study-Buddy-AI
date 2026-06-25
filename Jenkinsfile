@@ -5,6 +5,13 @@ pipeline {
         DOCKER_HUB_CREDENTIALS_ID = "dockerhub-token"
         IMAGE_TAG = "v${BUILD_NUMBER}"
     }
+    
+    when {
+        not {
+            changeset "k8s/**"
+        }
+    }
+
     stages {
         stage('Checkout Github') {
             steps {
