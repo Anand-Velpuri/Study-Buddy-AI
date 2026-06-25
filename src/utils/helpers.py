@@ -56,7 +56,8 @@ class QuizManager:
                 st.radio(
                     f"Select an answer for Question {i + 1}",
                     options=q["options"],
-                    key=f"mcq_{i}"
+                    key=f"mcq_{i}",
+                    index=None
                 )
             else:
                 st.text_input(
